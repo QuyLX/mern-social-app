@@ -11,7 +11,7 @@
     "dev": "concurrently \"yarn run server\" \"yarn run client\""
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "config": "^3.3.1",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
