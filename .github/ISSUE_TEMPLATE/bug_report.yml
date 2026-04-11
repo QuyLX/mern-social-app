@@ -1,0 +1,29 @@
+name: Bug report
+description: Báo lỗi / Report a bug
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mô tả ngắn gọn giúp tái hiện và xử lý nhanh hơn.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Tóm tắt
+      description: Điều gì không đúng so với kỳ vọng?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Các bước tái hiện
+      placeholder: "1. …\n2. …"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Môi trường
+      description: OS, phiên bản Node, trình duyệt (nếu liên quan UI).
+    validations:
+      required: false

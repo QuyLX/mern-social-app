@@ -1,0 +1,30 @@
+name: Feature request
+description: Đề xuất tính năng / Feature idea
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mô tả ý tưởng càng cụ thể càng dễ cân nhắc (user story, mockup, API…).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề hoặc động lực
+      description: Bạn đang thiếu điều gì? Ai được lợi?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Đề xuất
+      description: Hành vi mong muốn, giao diện, hoặc hướng kỹ thuật (nếu có).
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Phạm vi (tuỳ chọn)
+      options:
+        - label: Backend (Express / API)
+        - label: Frontend (React)
+        - label: DevOps / CI

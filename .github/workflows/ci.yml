@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+          cache-dependency-path: |
+            yarn.lock
+            client/yarn.lock
+
+      # Lockfiles are Yarn v1; pin classic Yarn so Ubuntu/Corepack does not upgrade to Yarn 4.
+      - name: Install Yarn classic
+        run: npm install -g yarn@1.22.22
+
+      - name: Install root dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install client dependencies and build
+        working-directory: client
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
