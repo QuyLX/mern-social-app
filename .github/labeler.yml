@@ -1,0 +1,31 @@
+# Các label dưới đây cần tồn tại trên GitHub: Settings → General → (hoặc Issues) → Labels
+# Gợi ý màu: client #0E8A16, server #1D76DB, ci #5319E7, dependencies #BFD4F2
+
+client:
+  - changed-files:
+      - any-glob-to-any-file: "client/**"
+
+server:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "routes/**"
+          - "models/**"
+          - "middleware/**"
+          - "config/**"
+          - "server.js"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "yarn.lock"
+          - "client/package.json"
+          - "client/yarn.lock"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.md"

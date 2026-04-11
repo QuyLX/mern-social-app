@@ -1,0 +1,8 @@
+# =============================================================================
+# PR Title Check — chỉnh regex cho khớp PM (Jira/Linear/Azure…).
+# Dòng bắt đầu bằng # là ghi chú. Dòng cuối cùng không phải comment = pattern (fullmatch).
+# =============================================================================
+# Mặc định (fullmatch cả tiêu đề):
+#   (A) Jira-style: PROJ-123: Mô tả (chữ project hoa, số vé, hai chấm, nội dung)
+#   (B) Conventional Commits: feat(scope): mô tả  (scope tùy chọn)
+^(?:[A-Z][A-Z0-9]{1,14}-\d+:\s.+\S|(feat|fix|chore|docs|style|refactor|perf|test|build|ci)(\([^)]+\))?:\s.+\S)$

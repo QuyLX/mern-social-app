@@ -1,0 +1,38 @@
+# Stale: gắn nhãn + comment khi issue/PR lâu không hoạt động; KHÔNG tự đóng (close = -1).
+# Tạo nhãn `stale` (hoặc để action tạo khi có quyền). Gắn `stale-ignore` để bỏ qua.
+name: Stale
+
+on:
+  schedule:
+    - cron: "45 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          days-before-issue-stale: 30
+          days-before-issue-close: -1
+          stale-issue-message: |
+            Issue này đã **30 ngày** không hoạt động. Nếu vẫn cần, hãy comment cập nhật; nếu không còn dùng có thể đóng.
+          stale-issue-label: stale
+          exempt-issue-labels: stale-ignore
+
+          days-before-pr-stale: 14
+          days-before-pr-close: -1
+          stale-pr-message: |
+            PR này đã **14 ngày** không hoạt động. Ping reviewer hoặc cập nhật nhánh để giữ PR sống.
+          stale-pr-label: stale
+          exempt-draft-pr: true
+          exempt-pr-labels: dependencies,stale-ignore
+
+          remove-stale-when-updated: true
+          operations-per-run: 40
