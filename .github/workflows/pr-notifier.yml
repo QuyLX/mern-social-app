@@ -1,0 +1,29 @@
+name: Telegram PR Notification
+
+# Luồng này sẽ chạy khi có PR mới hoặc PR chuyển từ trạng thái Draft sang Ready
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  notify_reviewers:
+    runs-on: ubuntu-latest # Chạy môi trường Linux để tối ưu chi phí
+
+    steps:
+      - name: Send PR Alert to Telegram Topic
+        # Bỏ qua nếu PR là Draft (chưa cần review)
+        if: github.event.pull_request.draft == false
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message_thread_id: 2 # THAY SỐ NÀY BẰNG THREAD_ID CỦA BẠN
+          format: markdown
+          message: |
+            🔥 **YÊU CẦU REVIEW PR MỚI**
+            
+            **Tiêu đề:** ${{ github.event.pull_request.title }}
+            **Người tạo:** ${{ github.event.pull_request.user.login }}
+            **Số file thay đổi:** ${{ github.event.pull_request.changed_files }}
+            
+            🔗 [Nhấn vào đây để xem và Review](${{ github.event.pull_request.html_url }})

@@ -7,3 +7,6 @@ client/build
 coverage/
 *.log
 .DS_Store
+
+# Local n8n secrets (copy from mapping.example.json)
+n8n/config/mapping.json
