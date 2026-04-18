@@ -1,0 +1,24 @@
+# Foundation-first: nhánh type/TASK-ID-slug + tiêu đề PR có [TASK-ID].
+# Không xung đột với pr-title-check.yml: workflow này áp khi bật (có thể gộp job sau).
+name: Vendor PR branch and title
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  vendor-conventions:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate branch name and PR title
+        env:
+          BRANCH: ${{ github.head_ref }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: python3 .github/scripts/check_vendor_conventions.py
