@@ -1,0 +1,3 @@
+Copy mapping.example.json -> mapping.json (gitignored in prod) or store secrets in n8n Credentials / Environment variables.
+telegram.chatId: numeric supergroup id (often negative).
+telegram.topics.*: message_thread_id for each forum topic (see n8n/README.md).

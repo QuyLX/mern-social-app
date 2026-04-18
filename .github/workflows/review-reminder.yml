@@ -1,0 +1,86 @@
+# Ưu tiên 2 (repo-level): nhắc review PR “im” quá lâu.
+# GitHub “Scheduled reminders” (Slack/email theo team) nằm ở Org/Team Settings — không commit được vào repo.
+# Cron: Thứ 3 & Thứ 6 08:00 UTC — đổi lịch trong khối cron bên dưới.
+name: Review reminder
+
+on:
+  schedule:
+    - cron: "0 8 * * 3,6"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const minDaysIdle = 3;
+            const minMsBetweenBotReminders = 5 * 24 * 60 * 60 * 1000;
+            const marker = '<!-- review-reminder-bot -->';
+
+            const { data: pulls } = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              per_page: 50,
+            });
+
+            let reminded = 0;
+            for (const pr of pulls) {
+              if (pr.draft) continue;
+
+              const updated = new Date(pr.updated_at).getTime();
+              const days = (Date.now() - updated) / (24 * 60 * 60 * 1000);
+              if (days < minDaysIdle) continue;
+
+              const labels = (pr.labels || []).map((l) => l.name);
+              if (labels.includes('stale-ignore')) continue;
+
+              const { data: comments } = await github.rest.issues.listComments({
+                owner,
+                repo,
+                issue_number: pr.number,
+                per_page: 50,
+                sort: 'updated',
+                direction: 'desc',
+              });
+
+              const lastBotReminder = comments.find(
+                (c) =>
+                  c.user?.login === 'github-actions[bot]' &&
+                  (c.body || '').includes(marker)
+              );
+              if (
+                lastBotReminder &&
+                Date.now() - new Date(lastBotReminder.created_at).getTime() <
+                  minMsBetweenBotReminders
+              ) {
+                continue;
+              }
+
+              const body = [
+                marker,
+                '⏰ **Nhắc review:** PR này đã lâu không có hoạt động.',
+                '',
+                '- Nếu cần người cụ thể, dùng `@username` trong comment.',
+                '- Gắn label `needs-review` (nếu có) để dễ lọc.',
+                '- Thêm label `stale-ignore` để bỏ qua nhắc tự động.',
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: pr.number,
+                body,
+              });
+              reminded += 1;
+            }
+
+            core.info(`Posted ${reminded} reminder(s).`);

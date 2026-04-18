@@ -1,0 +1,30 @@
+{
+  "$schema": "./mapping.schema.hint.txt",
+  "telegram": {
+    "botTokenEnv": "TELEGRAM_BOT_TOKEN",
+    "chatId": "-1001234567890",
+    "topics": {
+      "review": 101,
+      "cicd": 102,
+      "general": 103,
+      "design": 104
+    }
+  },
+  "github": {
+    "protectedBranches": ["main", "master", "develop"],
+    "ciWorkflowNames": ["CI", "ci", "build"],
+    "repositoryHtmlBase": "https://github.com/OWNER/REPO"
+  },
+  "githubUserToTelegram": {
+    "hoang-lead": { "handle": "@hoang_tele", "displayName": "Hoang" },
+    "vendor-dev-a": { "handle": "@vendor_a", "displayName": "An" }
+  },
+  "figma": {
+    "teamLeadDisplayNames": ["Hoang", "HOANG"],
+    "teamLeadHandlesInComment": ["@Hoang", "@hoang"]
+  },
+  "googleDocs": {
+    "watchedFileIds": ["1AbCdEfGhIjKlMnO_pQrStUvWxYz"],
+    "responsibleNames": ["Hoang", "BA_Lead"]
+  }
+}
